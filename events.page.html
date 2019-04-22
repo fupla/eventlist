@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Events</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="actionFunction()">
+        <ion-icon name="funnel"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <ion-col *ngFor="let event of events" size="12" size-sm="4">
+        <ion-card>
+          <ion-card-header color="primary">
+            <ion-card-title>{{event.title}}</ion-card-title>
+            <ion-card-subtitle>
+              <div class="sub-header">
+                <span>{{event.day}}.{{event.month}}.{{event.year}}</span>
+                <span>{{event.type}}</span>
+                <span>{{event.hours}}:{{event.minutes}}</span>
+              </div>
+            </ion-card-subtitle>
+          </ion-card-header>
+          <img *ngIf="!event.storno" src="../../../assets/img/{{event.type}}.png" alt="Info Pic">
+          <img *ngIf="event.storno" src="../../../assets/img/{{event.type}}Storno.png" alt="Info Pic">
+          <ion-card-content>
+            <ion-item *ngIf="!event.storno">
+                <ion-icon name="people" slot="start"></ion-icon>
+                <ion-label>{{event.already + event.guests.length}}/{{ event.min }}</ion-label>
+                <ion-icon *ngIf="event.eventState"  name="bulb" slot="end" color="success"></ion-icon>
+                <ion-icon *ngIf="!event.eventState"  name="bulb" slot="end" color="danger"></ion-icon>
+            </ion-item>
+            <ion-item *ngIf="!event.storno">
+              <ion-icon name="pin" slot="start"></ion-icon>
+              <ion-label text-wrap>{{ event.adress }}</ion-label>
+            </ion-item>
+            <ion-row *ngIf="!event.storno">
+              <ion-col size="6" size-sm="6">
+                <ion-button expand="block" routerLink="/event-detail/{{event.uid}}">Mehr Info</ion-button>
+              </ion-col>
+              <ion-col size="6" size-sm="6">
+                <ion-button *ngIf="event.isReg" expand="block" color="danger" (click)="unregister(event)">Verlassen</ion-button>
+                <ion-button *ngIf="!event.closed && !event.isReg" expand="block" (click)="eventReg(event)">Teilnehmen</ion-button>
+                <ion-button *ngIf="event.closed && !event.isReg" expand="block" color="danger">Ausgebucht</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <!-- Fab Button unten rechts -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button routerLink="/event-create">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
